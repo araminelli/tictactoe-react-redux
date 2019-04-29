@@ -10,29 +10,8 @@ const loadLeaderBoardState = () => {
     return JSON.parse(leaderBoard)
   } catch (e) {
     return [];
-    //console.log('state is not json')
   }
 }
-
-
-//   {
-//   id: 1,
-//   name: 'player1',
-//   wins: 0,
-//   plays: [],
-//   symbol: 'X',
-//   color: '#54741e',
-//   diffLeaderBoard: 0
-// },
-// {
-//   id: 1,
-//   name: 'player2',
-//   wins: 0,
-//   plays: [],
-//   symbol: 'O',
-//   color: '#658fdf',
-//   diffLeaderBoard: 0
-// }
 
 const initialState = fromJS({
   board:[0,1,2,3,4,5,6,7,8],
