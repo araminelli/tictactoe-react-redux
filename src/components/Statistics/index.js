@@ -8,7 +8,7 @@ const Statistics = ({ players, fastestTime, slowestTime}) => {
     <Wrapper>
       <Title>Game statistics:</Title>
       {players.map((player,i) => (
-        <Text key={i}>{`${i+1}. ${player.name} (${player.symbol}) ${player.wins} games won`}</Text>))}
+        <Text key={i}>{`${i+1}. ${player.name} (${player.symbol}): ${player.wins} games won`}</Text>))}
       {slowestTime && fastestTime && <Times>{`Fastest Time: ${fastestTime}s Slowest Time ${slowestTime}s`}</Times>}
     </Wrapper>
   )

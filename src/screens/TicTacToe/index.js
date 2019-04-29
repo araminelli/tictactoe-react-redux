@@ -48,7 +48,7 @@ class TicTacToe extends React.Component {
 		var currentPlayerObject = players[currentPlayer];
 		if (winCombination) {
 			message = (
-				<Message>{`${
+				<Message color={symbols[currentPlayerObject.symbol]}>{`${
 					currentPlayerObject.symbol
 				} player won in ${timeDuration}s!`}</Message>
 			);
