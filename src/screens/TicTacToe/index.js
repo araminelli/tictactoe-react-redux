@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { turn, reset } from 'actions/game';
+import { turn, reset, start } from 'actions/game';
 
 import TurnHeader from 'components/TurnHeader';
 import Board from 'components/Board';
 import Result from 'components/Result';
+import Players from 'components/Players';
 import LeaderBoard from 'components/LeaderBoard';
 import Statistics from 'components/Statistics';
 
@@ -17,6 +18,10 @@ class TicTacToe extends React.Component {
 			this.props.turn(currentPlayer, cellId);
 		}
 	}
+
+  onStart(player1,player2) {
+    this.props.start(player1,player2);
+  }
 
 	onStartOver() {
 		this.props.reset();
@@ -33,7 +38,11 @@ class TicTacToe extends React.Component {
 			timeDuration,
 			slowestTime,
 			fastestTime,
+			leaderBoard,
+      isStarted,
 		} = this.props.game;
+
+    if(!isStarted) return (<Players onStart={this.onStart.bind(this)}></Players>);
 
 		var message = null;
 		var currentPlayerObject = players[currentPlayer];
@@ -69,7 +78,7 @@ class TicTacToe extends React.Component {
 							fastestTime={fastestTime}
 							slowestTime={slowestTime}
 						/>
-            {/*<LeaderBoard players={players} />*/}
+					{leaderBoard && <LeaderBoard players={leaderBoard} />}
 					</VBox>
 				</Container>
 			</Content>
@@ -111,6 +120,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
 		turn: (currentPlayer, cellId) => dispatch(turn(currentPlayer, cellId)),
 		reset: () => dispatch(reset()),
+    start: (player1,player2) => dispatch(start(player1,player2))
 	};
 };
 

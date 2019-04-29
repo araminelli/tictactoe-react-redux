@@ -8,7 +8,7 @@ const LeaderBoard = ({ players }) => {
     <Wrapper>
       <Title>Top 10 Leader Board:</Title>
       {players.map((player,i) => (
-        <Text>{`${i+1}. ${player.name} ${player.wins} games won`}</Text>))}
+        <Text key={i}>{`${i+1}. ${player[0]} ${player[1]} games won`}</Text>))}
     </Wrapper>
   )
 }

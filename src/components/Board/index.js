@@ -41,7 +41,7 @@ class Board extends React.Component {
 	}
 
   render() {
-    return <Table>{this.renderGrid(3, 3)}</Table>;
+    return <Table><tbody>{this.renderGrid(3, 3)}</tbody></Table>;
   }
 }
 
