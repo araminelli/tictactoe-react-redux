@@ -3,14 +3,19 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Cell = props => (
-  <Button onClick={props.onClick}>
+  <Space color={props.color} background={props.background} onClick={props.onClick}>
     {props.value}
-  </Button>
+  </Space>
 );
 
-const Button = styled.button`
-  heigth:100px;
-  width:100px;
+const Space = styled.td`
+  border: 1px solid rgb(154,154,154);
+  height: 100px;
+  width: 100px;
+  text-align: center;
+  font-size: 40px;
+  color: ${props => props.color}
+  background: ${props => props.background}
 `;
 
 Cell.propTypes = {

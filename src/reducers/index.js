@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
-import tictactoe from './game'
+import game from './game'
 
 export default combineReducers({
-  tictactoe
+  game
 })

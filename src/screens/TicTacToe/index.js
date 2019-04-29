@@ -1,58 +1,117 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 
-import Turn from 'components/Turn';
+import { turn, reset } from 'actions/game';
+
+import TurnHeader from 'components/TurnHeader';
 import Board from 'components/Board';
+import Result from 'components/Result';
 import LeaderBoard from 'components/LeaderBoard';
 import Statistics from 'components/Statistics';
 
-
-class TicTacToe extends React.Component{
-
-  onPlayerClick(cellId){
-    console.log('e',cellId);
-    const { board } = this.props;
-    if (typeof board[cellId] === 'number') {
-			this.turn(cellId);
-		}
-  }
-
-  turn(cellId) {
-		let asSign = this.currentPlayer.getAs();
-		// In case first X set startTime
-		if (!this.startTime) this.startTime = new Date();
-		// update user with new play;
-		this.currentPlayer.addPlay(cellId);
-		// update board with current player sign
-		this.setCell(cellId, asSign);
-		// Check if the game is over
-		if (this.hasWin() || this.hasTie()) {
-			this.setTimeDuration();
-			this.gameOver();
-		} else {
-			// Update the currentPlayer.
-			this.alternateTurn();
-			// Update text on page.
-			this.updateWhoseTurn();
+class TicTacToe extends React.Component {
+	onPlayerClick(cellId) {
+		const { board, currentPlayer, gameOver } = this.props.game;
+		if (typeof board[cellId] === 'number' && !gameOver) {
+			this.props.turn(currentPlayer, cellId);
 		}
 	}
 
-  render(){
-    const { board } = this.props;
-    console.log(board);
-    return(
-      <div>
-        <Turn></Turn>
-        <Board cells={board} playerTurn={this.onPlayerClick}></Board>
-        <Statistics></Statistics>
-        <LeaderBoard></LeaderBoard>
-      </div>
-    )
-  }
+	onStartOver() {
+		this.props.reset();
+	}
+
+	render() {
+		const {
+			board,
+			players,
+			currentPlayer,
+			symbols,
+			winCombination,
+			gameOver,
+			timeDuration,
+			slowestTime,
+			fastestTime,
+		} = this.props.game;
+
+		var message = null;
+		var currentPlayerObject = players[currentPlayer];
+		if (winCombination) {
+			message = (
+				<Message>{`${
+					currentPlayerObject.symbol
+				} player won in ${timeDuration}s!`}</Message>
+			);
+		} else {
+			message = <Message>Draw!</Message>;
+		}
+
+		return (
+			<Content>
+				<Title>Tic-Tac-Toe!</Title>
+				<TurnHeader player={currentPlayerObject} />
+				{gameOver && (
+					<Result message={message} onStart={this.onStartOver.bind(this)} />
+				)}
+				<Container>
+					<VBox>
+						<Board
+							winCombination={winCombination}
+							symbols={symbols}
+							cells={board}
+							playerTurn={this.onPlayerClick.bind(this)}
+						/>
+					</VBox>
+					<VBox>
+						<Statistics
+							players={players}
+							fastestTime={fastestTime}
+							slowestTime={slowestTime}
+						/>
+            {/*<LeaderBoard players={players} />*/}
+					</VBox>
+				</Container>
+			</Content>
+		);
+	}
 }
 
-const mapToProps = (state) => {
-  board: state.board
-}
+const Title = styled.div`
+	margin: 22px 0;
+`;
 
-export default connect(mapToProps, null, TicTacToe);
+const Content = styled.div`
+	width: 800px;
+	margin: auto;
+	text-align: left;
+`;
+const Container = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+`;
+const VBox = styled.div`
+	flex: 1;
+`;
+
+const Message = styled.div`
+	font-size: 21px;
+	margin-bottom: 30px;
+	color: ${props => props.color};
+`;
+
+const mapStateToProps = (state, ownProps) => {
+	return {
+		game: state.game.toJS(),
+	};
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		turn: (currentPlayer, cellId) => dispatch(turn(currentPlayer, cellId)),
+		reset: () => dispatch(reset()),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicTacToe);
